@@ -26,11 +26,12 @@ export class Search extends Component {
 
    render() {
      return (
+        <div className="container page" style={{width: '100vw', marginTop: '40px', flexDirection: 'column' }}>
           <form id = 'mainSearchForm' onSubmit={this.handleSubmit} >
             <input id= 'mainSearchInput' onChange={this.handleChange} placeholder="Search" />
             <button id="search-button"> Submit </button>
           </form>
-
+        </div>
      )
     }
   }

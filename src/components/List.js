@@ -74,7 +74,7 @@ export class List extends Component {
     }
 
     return (
-      <div className="container page" style={{width: '100vw', marginTop: '3em', flexDirection: 'column' }}>
+      <div className="container page" style={{width: '100%', marginTop: '40px', flexDirection: 'column' }}>
         <div className="container" style={{ flexDirection: 'row' }}>
           <div className="itemsContainer">
             <div className="allItemsContainer" >

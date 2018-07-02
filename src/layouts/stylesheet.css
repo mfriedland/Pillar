@@ -619,13 +619,11 @@ pre tt:after {
 }
 .home {
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 }
 #mainSearchInput {
-  margin-right: .4vw;
-  width: 14vw;
-  height: 2.5vh;
   border: none;
   background-color: rgba(0, 0, 0, 0);
   border-bottom: 1px solid rgb(60, 58, 58);
