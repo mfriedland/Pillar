@@ -617,6 +617,11 @@ pre tt:before,
 pre tt:after {
   content: "";
 }
+.home {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
 #mainSearchInput {
   margin-right: .4vw;
   width: 14vw;

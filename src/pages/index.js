@@ -17,9 +17,8 @@ export class IndexPage extends Component {
   }
 
   render() {
-    console.log(this.state.organization)
     return (
-      <div>
+      <div className="home">
         <Search companyToRender={this.companyToRender} />
         <List organization={this.state.organization} />
         {/* <Link to="/page-2/">Go to page 2</Link> */}

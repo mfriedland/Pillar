@@ -1,64 +1,46 @@
 import React, { Component } from 'react';
-// import Card from '../common/Card';
-// import Filter from '../common/Filter'
 
-let git = [];
 let gitDetail = [];
+let internalContributors = [];
+let externalContributors = [];
 
 export class List extends Component {
   constructor() {
     super();
     this.state = {
       organization: null,
-      filters: false,
-      cheap: false,
-      inexpensive: false,
-      midrange: false,
-      expensive: false
+      toggle: "Internal"
     }
   }
 
   componentDidMount() {
-
   }
-
-
-  // fetch(`https://api.github.com/users/${searchCriteria}/repos`)
-  // .then(res => res.json())
-  // .then(foundResults => git.push(foundResults))
-  // .then( () => console.log(git))
-  // .then( () => {
-  //   for (let i=0; i<git[0].length; i++) {
-  //   gitDetail.push(git[0][i])
-  //   }
-  // })
-  // .then( () => gitDetail.sort((a,b) => {
-  //   return b.forks_count - a.forks_count
-  // } ))
-  // .then( () => console.log(gitDetail))
-
-
-      //fetch all members
-    // (`https://api.github.com/orgs/${searchCriteria}/members`)
-    //fetch all external collaborators
-    // (`https://api.github.com/orgs/${searchCriteria}/outside_collaborators`)
-    // fetches all repos
-    // fetch (`https://api.github.com/users/facebook/repos`)
-    // fetch all contributors(`https://api.github.com/repos/facebook/Docusaurus/contributors`)
 
   convertToRepos(organization) {
     fetch(`https://api.github.com/users/${organization}/repos`)
       .then(res => res.json())
-      .then(foundResults => git.push(foundResults))
-      .then(() => {
-        for (let i=0; i<git[0].length; i++) {
-          gitDetail.push(git[0][i])
+      .then(foundResults => {
+        for (let i=0; i<foundResults.length; i++) {
+          gitDetail.push(foundResults[i])
         }
       })
-      .then(() => {
+  }
 
+  findContributors(organization) {
+    fetch(`https://api.github.com/orgs/${organization}/members`)
+      .then(res => res.json())
+      .then(results => {
+        for (let i=0; i<results.length; i++) {
+          internalContributors.push(results[i])
+        }
       })
-      .then(() => console.log(gitDetail))
+    fetch(`https://api.github.com/orgs/${organization}/outside_collaborators`)
+    .then(res => res.json())
+    .then(results => {
+      for (let i=0; i<results.length; i++) {
+        externalContributors.push(results[i])
+      }
+    })
   }
 
   sortByForks() {
@@ -75,31 +57,41 @@ export class List extends Component {
     this.setState(this.state.list)
   }
 
+  toggleContributor() {
+    if (this.state.toggle === "External") {
+      this.setState({toggle: "Internal"});
+    } else {
+      this.setState({toggle: "External"});
+    }
+  }
+
   render() {
-    let organization = this.props.organization
+    let organization = this.props.organization;
+    let toggle = this.state.toggle;
     if (this.props.organization) {
+      this.findContributors(this.props.organization)
       this.convertToRepos(this.props.organization)
     }
+
     return (
       <div className="container page" style={{width: '100vw', marginTop: '3em', flexDirection: 'column' }}>
         <div className="container" style={{ flexDirection: 'row' }}>
-          {/* <Filter /> */}
           <div className="itemsContainer">
             <div className="allItemsContainer" >
               {
                 !organization
                   ?
-                 <h2> Loading... </h2>
+                 <h2> </h2>
                   :
+                <div>
+                  <h1>{organization}</h1>
+                  <h2>Repositories</h2>
                   <table className="table table-striped">
                     <thead>
                       <tr>
                         <th>Repository Name</th>
                         <th><button onClick={() => this.sortByForks()}>Forks</button></th>
                         <th><button onClick={() => this.sortByStars()}>Stars</button></th>
-                        <th>Contributors</th>
-                        <th>Internal Contributors</th>
-                        <th>External Contributors</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -116,6 +108,38 @@ export class List extends Component {
                       }
                     </tbody>
                   </table>
+
+                  <h2>Contributors</h2>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th><button onClick={() => this.toggleContributor()}>{toggle}</button></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        toggle === "Internal" &&
+                        internalContributors.map(contributor =>  {
+                          return (
+                            <tr key={contributor.id}>
+                              <td> {contributor.login} </td>
+                            </tr>
+                          )
+                        })
+                      }
+                      {
+                        toggle === "External" &&
+                        externalContributors.map(contributor =>  {
+                          return (
+                            <tr key={contributor.id}>
+                              <td> {contributor.login} </td>
+                            </tr>
+                          )
+                        })
+                      }
+                    </tbody>
+                  </table>
+                </div>
               }
             </div>
           </div>
