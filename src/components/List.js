@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+/* eslint-disable*/
+/* tslint-disable*/
 
 let gitDetail = [];
 let internalContributors = [];
@@ -41,6 +43,7 @@ export class List extends Component {
         externalContributors.push(results[i])
       }
     })
+    .then( ()=> console.log(externalContributors))
   }
 
   sortByForks() {
@@ -89,7 +92,7 @@ export class List extends Component {
                   <table className="table table-striped">
                     <thead>
                       <tr>
-                        <th>Repository Name</th>
+                        <th>Name</th>
                         <th><button onClick={() => this.sortByForks()}>Forks</button></th>
                         <th><button onClick={() => this.sortByStars()}>Stars</button></th>
                       </tr>
@@ -121,7 +124,7 @@ export class List extends Component {
                         toggle === "Internal" &&
                         internalContributors.map(contributor =>  {
                           return (
-                            <tr key={contributor.id}>
+                            <tr key={[contributor.id,contributor.login]}>
                               <td> {contributor.login} </td>
                             </tr>
                           )
@@ -131,7 +134,7 @@ export class List extends Component {
                         toggle === "External" &&
                         externalContributors.map(contributor =>  {
                           return (
-                            <tr key={contributor.id}>
+                            <tr key={[contributor.login,contributor.id]}>
                               <td> {contributor.login} </td>
                             </tr>
                           )
